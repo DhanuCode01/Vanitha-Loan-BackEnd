@@ -16,7 +16,7 @@ const pool = mysql.createPool({
   connectTimeout: 10000,
 });
 
-// ✅ Check connection
+/* // ✅ Check connection
 async function checkMySQLConnection() {
   try {
     const connection = await pool.getConnection();
@@ -28,5 +28,5 @@ async function checkMySQLConnection() {
 }
 
 checkMySQLConnection();
-
+ */
 export default pool;
