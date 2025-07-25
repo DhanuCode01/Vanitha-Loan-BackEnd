@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors"
 import jwt from "jsonwebtoken"; 
 import customerRouter from "./Router/CustomerRouter.js";
+import accountRouter from "./Router/AccountRouter.js";
 
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use((req,res,next)=>{
 
 app.use("/api/user",userRouter);
 app.use("/api/customer",customerRouter);
+app.use("/api/account",accountRouter);
 
 
 
