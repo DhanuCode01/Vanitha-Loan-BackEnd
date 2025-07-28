@@ -38,7 +38,7 @@ export async function getOnlyNames(req,res) {
         const [groupRows] = await pool.execute(groupQuery);  //test key value ,these tow values are used testing prpose
         /* const groupQuery= `SELECT UPPER(customerinformation.CustomerName) AS CUSTOMER_NAME FROM ledgerdetails INNER JOIN customerinformation ON (ledgerdetails.CustomerID = customerinformation.CustomerID) WHERE ledgerdetails.AccountStatus = 'ACTIVE' AND customerinformation.RelatedUserID = ?;`
         const [groupRows] = await pool.execute(groupQuery, [key]); */        
-        console.log(groupRows)
+        
 
         if (groupRows.length > 0) {
             res.status(200).json({ groupRows });
