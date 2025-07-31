@@ -110,6 +110,14 @@ export async function LoginUser(req, res) {
         }
 
         const user = rows[0]; // Get the first (and only) user
+
+        const data={                                                //Create array and Assaing 
+                        key:rows[0].key,
+                        PermissionLevel:rows[0].PermissionLevel,
+                        UserName:rows[0].UserName,
+                        UserID:rows[0].UserID,
+                        Device_id:rows[0].Device_id
+                    }
         
 
         // Compare the provided password with the hashed password in the database
@@ -133,7 +141,7 @@ export async function LoginUser(req, res) {
                 /* { expiresIn: "2h" }  */// Token expires in 2 hours
             );
 
-            res.json({ success: "Login Successfully", token: token,user:user });
+            res.json({ success: "Login Successfully", token: token,data:data });
 
         } else {
             res.status(401).json({ error: "Incorrect password" });
