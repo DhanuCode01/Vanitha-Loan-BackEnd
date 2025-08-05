@@ -11,8 +11,7 @@ export async function setInstallment(req,res) {
         const currentTime = now.toTimeString().split(' ')[0]; // format: HH:MM:SS
 
         const year = now.getFullYear();           // e.g., 2025
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // e.g., 07 (months are 0-indexed)
-
+        const month =  String(now.getMonth() + 1).padStart(2, '0'); // e.g., 07 (months are 0-indexed)
 
         let transactionsID=null;
 
@@ -26,12 +25,25 @@ export async function setInstallment(req,res) {
         }else{
                                 const lastTransactionsID=lastRow.ID //"MR2025070600003"
                                 const lastTransactionsFullNumberInString=lastTransactionsID.replace("MR","");//"2025070600003"  (String)
-                                const lastTransactionsNumberInString = lastTransactionsFullNumberInString.slice(-5); // "00003" // Extract the last 5 digits (the running number)
-                                const lastTransactionsNumber=parseInt(lastTransactionsNumberInString);//00003   (Integer)
-                                const currentTransactionNumber=lastTransactionsNumber+1;    //3+1 (4)
 
-                                const formattedNumber=String(currentTransactionNumber).padStart(5, '0');//"00004"
-                                transactionsID=`MR${year}${month}${data.UserID}${formattedNumber}`
+                                
+                                const yearMonth = lastTransactionsFullNumberInString.slice(0, 6); // "202507" // Extract the year + month (first 6 characters)
+                                
+
+                                if(yearMonth == `${year}${month}`){
+                                    
+                                    const lastTransactionsNumberInString = lastTransactionsFullNumberInString.slice(-5); // "00003" // Extract the last 5 digits (the running number)
+                                    const lastTransactionsNumber=parseInt(lastTransactionsNumberInString);//00003   (Integer)
+                                    const currentTransactionNumber=lastTransactionsNumber+1;    //3+1 (4)
+
+                                    const formattedNumber=String(currentTransactionNumber).padStart(5, '0');//"00004"
+                                    transactionsID=`MR${year}${month}${data.UserID}${formattedNumber}`
+
+                                }else{
+                                    transactionsID=`MR${year}${month}${data.UserID}00001`  
+                                }
+
+                                
         }
 
 
