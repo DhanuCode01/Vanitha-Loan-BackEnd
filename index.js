@@ -2,46 +2,41 @@ import express from "express";
 import userRouter from "./Router/UserRouter.js";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import cors from "cors"
-import jwt from "jsonwebtoken"; 
+import cors from "cors";
+import jwt from "jsonwebtoken";
 import customerRouter from "./Router/CustomerRouter.js";
 import accountRouter from "./Router/AccountRouter.js";
 import InstallmentRouter from "./Router/InstallmentRouter.js";
 
+dotenv.config(); // Load environment variables from .env
 
-dotenv.config();
-
-const app=express();
+const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use((req,res,next)=>{
-    
-    let token=req.header  //midleware webtoken reading
-    ("Authorization")
-    
-     if (token!=null){
-        token=token.replace("Bearer ","") //"Bearer" Skip this word  
-        jwt.verify(token,process.env.jwt_SECRET,
-            (err,decoded)=>{                //get error or decoded value
-                if(!err){
-                    req.user=decoded;      //assign reqest user to decoded value  
-                }
-            }
-        )
-     }
-     next() 
- 
-})  
-  
+//  JWT Middleware
+app.use((req, res, next) => {
+  let token = req.header("Authorization"); // Read Authorization header
 
+  if (token != null) {
+    token = token.replace("Bearer ", ""); // Remove "Bearer " prefix
 
+    //  FIXED: Corrected environment variable name
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (!err) {
+        req.user = decoded; // Attach decoded token to request
+      }
+    });
+  }
 
-app.use("/api/user",userRouter);
-app.use("/api/customer",customerRouter);
-app.use("/api/account",accountRouter);
-app.use("/api/installment",InstallmentRouter);
+  next(); // Proceed to next middleware/route
+});
 
+//  Route definitions
+app.use("/api/user", userRouter);
+app.use("/api/customer", customerRouter);
+app.use("/api/account", accountRouter);
+app.use("/api/installment", InstallmentRouter);
 
 const PORT = process.env.PORT || 3002;
 

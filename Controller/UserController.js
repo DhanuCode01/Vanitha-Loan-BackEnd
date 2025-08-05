@@ -149,7 +149,7 @@ export async function LoginUser(req, res) {
  
     } catch (error) {
         console.error("Database error:", error);
-        res.status(500).json({ error: error });
+        res.status(500).json({ error: "Database connection unsuccessful" });
     }
 }
  
