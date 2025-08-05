@@ -6,7 +6,7 @@ dotenv.config();
 const pool = mysql.createPool({
   host: '209.133.220.90',
   user: 'holcemlk_mobile',
-  password: process.env.db_password,
+  password:process.env.db_password,
   database: 'holcemlk_nanosoft_banker_mobile',
   port: 3306,
   charset: 'utf8mb4_unicode_ci',
