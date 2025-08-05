@@ -43,8 +43,8 @@ app.use("/api/account",accountRouter);
 app.use("/api/installment",InstallmentRouter);
 
 
+const PORT = process.env.PORT || 3002;
 
-    app.listen(3002,()=>{
-        console.log("Server port 3002 is running ")})
-   
- 
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
