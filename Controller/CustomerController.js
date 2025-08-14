@@ -1,16 +1,23 @@
 import pool from "../db.js";
 import { isToken } from "../Validation/TokenValidation.js";
 
-export async function getMembers(req,res) {
+export async function getGroups(req,res) {
     try {
 
         isToken(req,res);;
 
         const key=req.params.key;
-        const groupQuery = `SELECT DISTINCT(customerinformation.CustomerID), UPPER(customerinformation.CustomerName) AS CUSTOMER_NAME, UPPER(customerinformation.CustomerAddress) AS CUSTOMER_ADDRESS, IFNULL(customerinformation.NIC,'-') AS NIC, IFNULL(customerinformation.PersonnalMobileNo,'-') AS PersonnalMobileNo,IFNULL(customerinformation.PersonnalTelephoneNo,'-') AS PersonnalTelephoneNo FROM ledgerdetails INNER JOIN customerinformation ON (ledgerdetails.CustomerID = customerinformation.CustomerID) WHERE ledgerdetails.AccountStatus = 'ACTIVE' AND ledgerdetails.AccountType = 'L' ;`;  
+        const groupQuery = `SELECT DISTINCT(customergroup.GroupCode),
+                            UPPER(customergroup.GroupName) AS GROUP_NAME
+                            FROM customergroup
+                            WHERE customergroup.UserID='-' 
+                            AND customergroup.GroupType='S'
+                            AND customergroup.GroupCode < '00013'
+                            AND customergroup.GroupCode  <> '00006'
+                            AND customergroup.GroupCode  <> '00008'; 
+                            `;  //testing      //customergroup.UserID='[key]'
         const [groupRows] = await pool.execute(groupQuery);  //test key value ,these tow values are used testing prpose
-        /* const groupQuery=  `SELECT DISTINCT(customerinformation.CustomerID), UPPER(customerinformation.CustomerName) AS CUSTOMER_NAME, UPPER(customerinformation.CustomerAddress) AS CUSTOMER_ADDRESS, IFNULL(customerinformation.NIC,'-') AS NIC, IFNULL(customerinformation.PersonnalMobileNo,'-') AS PersonnalMobileNo,IFNULL(customerinformation.PersonnalTelephoneNo,'-') AS PersonnalTelephoneNo FROM ledgerdetails INNER JOIN customerinformation ON (ledgerdetails.CustomerID = customerinformation.CustomerID) WHERE ledgerdetails.AccountStatus = 'ACTIVE' AND customerinformation.RelatedUserID = ?;`
-        const [groupRows] = await pool.execute(groupQuery, [key]); */        
+               
         
 
         if (groupRows.length > 0) {
@@ -18,13 +25,53 @@ export async function getMembers(req,res) {
             return;
         }
 
-        res.status(400).json({ error: "NO Member Check Customer ID‼️" });
+        res.status(400).json({ error: "NO GROUP‼️" });
         return
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Database connection unsuccessful ❓" });
     }
 }
+
+
+
+export async function getGroupMembers(req,res) {
+    try {
+
+        isToken(req,res);;
+
+        const key=req.params.key;
+        const SearchQuery = `
+            SELECT DISTINCT(customerinformation.CustomerID),
+                   UPPER(customerinformation.CustomerName) AS CUSTOMER_NAME,
+                   UPPER(customerinformation.CustomerAddress) AS CUSTOMER_ADDRESS,
+                   IFNULL(customerinformation.NIC,'-') AS NIC,
+                   IFNULL(customerinformation.PersonnalMobileNo,'-') AS PersonnalMobileNo,
+                   IFNULL(customerinformation.PersonnalTelephoneNo,'-') AS PersonnalTelephoneNo
+            FROM ledgerdetails
+            INNER JOIN customerinformation
+                    ON ledgerdetails.CustomerID = customerinformation.CustomerID
+            WHERE ledgerdetails.AccountStatus = 'ACTIVE'
+              AND ledgerdetails.AccountType = 'L'
+              AND customerinformation.SubGroupCode = ?;
+        `;
+        
+        const [SearchRows] = await pool.execute(SearchQuery,[key] );
+        
+
+        if (SearchRows.length > 0) {
+            res.status(200).json({ SearchRows });
+            return;
+        }
+
+        res.status(400).json({ error: "NO Member Check Again‼️" });
+        return
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Database connection unsuccessful ❓" });
+    }
+}
+
 
 export async function getSearchMembers(req, res) {
     try {
@@ -38,7 +85,7 @@ export async function getSearchMembers(req, res) {
             return res.status(400).json({ error: "No Data Try Again‼️" });
         }
 
-        let params = [`${data.data}%`];
+        const params = [`%${data.data}%`];
         let allResults = [];
 
         // 1️ Try CustomerName

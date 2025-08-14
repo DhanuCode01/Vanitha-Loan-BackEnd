@@ -9,7 +9,7 @@ export async function getAccount(req,res) {
 
 
         //get all customerID     //Reason is the customer Division
-        const CustomerIDQuery=`SELECT DISTINCT(customerinformation.CustomerID) FROM ledgerdetails INNER JOIN customerinformation ON (ledgerdetails.CustomerID = customerinformation.CustomerID) WHERE ledgerdetails.AccountStatus = 'ACTIVE' ;`
+        const CustomerIDQuery=`SELECT DISTINCT(customerinformation.CustomerID) FROM ledgerdetails INNER JOIN customerinformation ON (ledgerdetails.CustomerID = customerinformation.CustomerID) WHERE ledgerdetails.AccountStatus = 'ACTIVE' AND ledgerdetails.AccountType = 'L' ;`
         const [CustomerID] = await pool.execute(CustomerIDQuery);
 
         //check  the customers Details is loded
