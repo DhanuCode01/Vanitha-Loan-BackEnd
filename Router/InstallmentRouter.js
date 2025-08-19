@@ -5,6 +5,6 @@ import { ConformReEnter, setInstallment } from "../Controller/InstallmentControl
 const InstallmentRouter=express.Router();
 
 InstallmentRouter.post("/",setInstallment);
-InstallmentRouter.get("/",ConformReEnter);
+InstallmentRouter.post("/get",ConformReEnter);
 
 export default InstallmentRouter;

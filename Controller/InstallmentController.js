@@ -69,7 +69,7 @@ export async function ConformReEnter(req,res) {
         isToken(req,res);
         const data=req.body.AccountNumber;
         const now = new Date();
-        const currentDate = now.toISOString().split('T')[0]; // format: YYYY-MM-DD
+        const currentDate =now.toISOString().split('T')[0]; // format: YYYY-MM-DD
 
         const Transactiondetails=`SELECT DISTINCT(mobile_loan_transactions.ID),(mobile_loan_transactions.CreditAmount) FROM holcemlk_nanosoft_banker_mobile.mobile_loan_transactions
               WHERE mobile_loan_transactions.AccountNumber= ? 
@@ -86,7 +86,7 @@ export async function ConformReEnter(req,res) {
                         totalCredit
                     });
         } else {
-                    return res.status(401).json({ error: "No transactions found" });
+                    return res.status(401).json({ error: "No Transactions Found‼️" });
         }
 
 
