@@ -62,3 +62,37 @@ export async function setInstallment(req,res) {
             res.status(500).json({ error: "Database connection unsuccessful ❓" });
         }
 }
+
+
+export async function ConformReEnter(req,res) {
+    try{
+        isToken(req,res);
+        const data=req.body.AccountNumber;
+        const now = new Date();
+        const currentDate = now.toISOString().split('T')[0]; // format: YYYY-MM-DD
+
+        const Transactiondetails=`SELECT DISTINCT(mobile_loan_transactions.ID),(mobile_loan_transactions.CreditAmount) FROM holcemlk_nanosoft_banker_mobile.mobile_loan_transactions
+              WHERE mobile_loan_transactions.AccountNumber= ? 
+              AND mobile_loan_transactions.TransactionDate=? `
+        const [TransactionRows] = await pool.execute(Transactiondetails,[data,currentDate]);
+
+        if(TransactionRows.length !== 0){
+                    //  Calculate total
+                    const totalCredit = TransactionRows.reduce(
+                        (sum, row) => sum + Number(row.CreditAmount),
+                        0
+                    );
+                    return res.status(200).json({
+                        totalCredit
+                    });
+        } else {
+                    return res.status(401).json({ error: "No transactions found" });
+        }
+
+
+    }catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Database connection unsuccessful ❓" });
+        }
+    
+}
