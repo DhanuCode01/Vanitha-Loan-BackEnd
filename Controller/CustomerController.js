@@ -276,7 +276,7 @@ export async function getPaidDetails(req,res) {
         
 
 
-        const Query = `SELECT  AccountNumber, CustomerID , TransactionDate, TransactionTime, DebitAmount,CreditAmount FROM mobile_loan_transactions WHERE TransactionDate = ? ;`;  
+        const Query = `SELECT  AccountNumber, CustomerID , TransactionDate, TransactionTime, DebitAmount,CreditAmount FROM mobile_loan_transactions WHERE TransactionDate = ? AND transaction_status = 0  ;`;  
         const [Rows] = await pool.execute(Query,[currentDate]);        
         
 
