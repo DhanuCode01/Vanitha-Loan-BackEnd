@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import customerRouter from "./Router/CustomerRouter.js";
 import accountRouter from "./Router/AccountRouter.js";
 import InstallmentRouter from "./Router/InstallmentRouter.js";
+import depositsRouter from "./Router/DepositsRouter.js";
 
 dotenv.config(); // Load environment variables from .env
 
@@ -37,6 +38,7 @@ app.use("/api/user", userRouter);
 app.use("/api/customer", customerRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/installment", InstallmentRouter);
+app.use("/api/deposits", depositsRouter);
 
 const PORT = process.env.PORT || 3002;
 

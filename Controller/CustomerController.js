@@ -269,6 +269,7 @@ export async function getSearchMembers(req, res) {
 export async function getPaidDetails(req,res) {
     try {
         
+        const UserID = req.params.key;
         isToken(req,res);
 
         const now = new Date();
@@ -276,8 +277,9 @@ export async function getPaidDetails(req,res) {
         
 
 
-        const Query = `SELECT  AccountNumber, CustomerID , TransactionDate, TransactionTime, DebitAmount,CreditAmount FROM mobile_loan_transactions WHERE TransactionDate = ? AND transaction_status = 0  ;`;  
-        const [Rows] = await pool.execute(Query,[currentDate]);        
+        const Query = `SELECT  AccountNumber, CustomerID , TransactionDate, TransactionTime, DebitAmount,CreditAmount FROM mobile_loan_transactions WHERE TransactionDate = ? AND slipID IS NULL AND UserID=? ;`; 
+        //used for testing  add [AND UserID=?] 
+        const [Rows] = await pool.execute(Query,["2025-09-07",UserID]);        
         
 
         if (Rows.length > 0) {
