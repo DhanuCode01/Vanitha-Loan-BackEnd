@@ -61,7 +61,7 @@ export async function addDeposits(req,res) {
                 AND AccountNumber = ?;
             `;
 
-            const values1 = [transactionsID, data.UserID, "2025-07-31", accountNumber];//test 2025-07-31 change to currentdate
+            const values1 = [transactionsID, data.UserID, currentDate, accountNumber];//test 2025-07-31 change to currentdate
             await pool.execute(sql1, values1);
         }
 
@@ -71,7 +71,7 @@ export async function addDeposits(req,res) {
 
 
 
-        res.status(200).json({ message: "saved successfully"})
+        res.status(200).json({ message: "Saved Successfully ✔️"})
         return;
 
 
