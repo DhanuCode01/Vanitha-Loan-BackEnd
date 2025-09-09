@@ -13,7 +13,12 @@ dotenv.config(); // Load environment variables from .env
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+
+
+//  Increase body size limit here
+//app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 //  JWT Middleware
 app.use((req, res, next) => {

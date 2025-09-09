@@ -279,7 +279,7 @@ export async function getPaidDetails(req,res) {
 
         const Query = `SELECT  AccountNumber, CustomerID , TransactionDate, TransactionTime, DebitAmount,CreditAmount FROM mobile_loan_transactions WHERE TransactionDate = ? AND slipID IS NULL AND UserID=? ;`; 
         //used for testing  add [AND UserID=?] 
-        const [Rows] = await pool.execute(Query,["2025-09-07",UserID]);        
+        const [Rows] = await pool.execute(Query,[currentDate,UserID]);        
         
 
         if (Rows.length > 0) {

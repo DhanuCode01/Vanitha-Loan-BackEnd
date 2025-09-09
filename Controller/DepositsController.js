@@ -5,6 +5,7 @@ export async function addDeposits(req,res) {
     try{
         isToken(req,res);
         const data=req.body;
+        const slipBuffer = Buffer.from(data.Slip); 
 
         const now = new Date();
         const currentDate = now.toISOString().split('T')[0]; // format: YYYY-MM-DD
@@ -47,7 +48,7 @@ export async function addDeposits(req,res) {
         }
 
         const sql=`INSERT INTO slip (ID, date, CurrentDate, CurrentTime, NameOfAccountHolder, Slip, Total) VALUES (?, ?, ?, ?, ?, ?, ?) `;
-        const values = [transactionsID, data.date, currentDate, currentTime, data.NameOfAccountHolder, data.Slip, data.Total];
+        const values = [transactionsID, data.date, currentDate, currentTime, data.NameOfAccountHolder, slipBuffer, data.Total];
         await pool.execute(sql, values);
 
         for (let i = 0; i < data.AccountNumbers.length; i++) {
@@ -66,10 +67,6 @@ export async function addDeposits(req,res) {
         }
 
         
-
-        
-
-
 
         res.status(200).json({ message: "Saved Successfully ✔️"})
         return;
